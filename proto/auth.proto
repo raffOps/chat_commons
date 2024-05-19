@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "./pb";
+
+enum Role {
+  ADMIN = 0;
+  USER = 1;
+}
+
+message SignUpRequest {
+  string name = 1;
+  string password = 2;
+}
+
+message SignUpResponse {
+  string id = 1;
+  string name = 2;
+  Role role = 3;
+  google.protobuf.Timestamp created_at = 4;
+}
+
+message LoginRequest {
+  string name = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  string message = 1;
+}
+
+service Auth {
+  rpc SignUp (SignUpRequest) returns (SignUpResponse) {}
+  rpc Login (LoginRequest) returns (LoginResponse) {}
+}

@@ -35,6 +35,7 @@ func sanityCheck() {
 }
 
 func GetPostgresConn() *sql.DB {
+	sanityCheck()
 	err := godotenv.Load("config/dev.env")
 	if err != nil {
 		panic(err)
@@ -50,5 +51,11 @@ func GetPostgresConn() *sql.DB {
 	if err != nil {
 		panic(err)
 	}
+
+	err = db.Ping()
+	if err != nil {
+		panic(err)
+	}
+
 	return db
 }

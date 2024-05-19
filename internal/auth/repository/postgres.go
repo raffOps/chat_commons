@@ -51,7 +51,6 @@ func (p PostgresRepository) Get(ctx context.Context, name string) (model.User, *
 
 	switch {
 	case errors.Is(err, sql.ErrNoRows):
-		log.Printf("no user with name %s\n", name)
 		return model.User{}, &errs.Err{Message: "no user found", Code: http.StatusNotFound}
 	case err != nil:
 		log.Printf("query error: %v\n", err)
@@ -65,10 +64,10 @@ func (p PostgresRepository) Get(ctx context.Context, name string) (model.User, *
 func (p PostgresRepository) Create(ctx context.Context, user model.User) (model.User, *errs.Err) {
 	var id, name, password, role sql.NullString
 	var createdAt sql.NullTime
-	createUserQuery := `INSERT INTO public."user" (name, password) VALUES ($1, $2) 
+	createUserQuery := `INSERT INTO public."user" (name, password, role) VALUES ($1, $2, $3) 
                                            RETURNING id, name, password, role, created_at`
 
-	err := p.db.QueryRowContext(ctx, createUserQuery, user.Name, user.Password).
+	err := p.db.QueryRowContext(ctx, createUserQuery, user.Name, user.Password, user.Role).
 		Scan(&id, &name, &password, &role, &createdAt)
 
 	if err != nil {

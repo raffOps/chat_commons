@@ -7,7 +7,7 @@ import (
 	"github.com/raffops/chat/internal/auth/repository"
 	"github.com/raffops/chat/internal/errs"
 	model "github.com/raffops/chat/internal/models"
-	"github.com/raffops/chat/internal/util"
+	"github.com/raffops/chat/pkg/password_hasher"
 	"net/http"
 	"os"
 	"time"
@@ -19,7 +19,7 @@ var (
 
 type service struct {
 	repo   repository.Repository
-	hasher util.PasswordHasher
+	hasher password_hasher.PasswordHasher
 }
 
 func (s *service) Login(ctx context.Context, name, password string) (string, *errs.Err) {
@@ -47,12 +47,15 @@ func (s *service) Login(ctx context.Context, name, password string) (string, *er
 	return tokeString, nil
 }
 
-func (s *service) SignUp(ctx context.Context, user model.User) (model.User, *errs.Err) {
+func (s *service) SignUp(ctx context.Context, name, password string) (model.User, *errs.Err) {
+	user := model.User{Name: name, Password: password, Role: "USER"}
+
 	validate := validator.New()
 	err := validate.Struct(user)
 	if err != nil {
 		return model.User{}, &errs.Err{Message: err.Error(), Code: http.StatusBadRequest}
 	}
+
 	foundUser, errGet := s.repo.Get(ctx, user.Name)
 	if errGet == nil && foundUser.Name == user.Name {
 		return model.User{}, &errs.Err{Message: "user already exists", Code: http.StatusConflict}
@@ -70,20 +73,6 @@ func (s *service) SignUp(ctx context.Context, user model.User) (model.User, *err
 	return createdUser, nil
 }
 
-func NewUserService(repo repository.Repository, hasher util.PasswordHasher) Service {
+func NewUserService(repo repository.Repository, hasher password_hasher.PasswordHasher) Service {
 	return &service{repo: repo, hasher: hasher}
 }
-
-//func main() {
-//	postgresConn := database.GetPostgresConn()
-//	defer postgresConn.Close()
-//	repo := repository.NewPostgresRepo(postgresConn)
-//	service := NewUserService(repo)
-//	pass := "passwordEROPFIUTJLRIPK;TJERIUTIOERUPOUTE"
-//	//user, err := service.SignUp(
-//	//	context.Background(),
-//	//	model.User{Name: "testE", Password: pass , Role: "ADMIN"})
-//	//fmt.Printf("user: %v, err: %v\n", user, err)
-//	token, err := service.Login(context.Background(), "testE", pass)
-//	println(token, err)
-//}

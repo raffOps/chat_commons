@@ -1,12 +1,6 @@
-package util
+package password_hasher
 
 import "golang.org/x/crypto/bcrypt"
-
-//go:generate mockery --name PasswordHasher
-type PasswordHasher interface {
-	HashPassword(password string) (string, error)
-	CheckPasswordHash(password, hash string) bool
-}
 
 type BcryptHasher struct{}
 
