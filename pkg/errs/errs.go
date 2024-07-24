@@ -50,6 +50,7 @@ func NewError(svcError, appError error) ChatError {
 			zap.Error(appError),
 			zap.String("stack", string(debug.Stack())),
 		)
+		return &authError{svcError: svcError, appError: nil}
 	}
 	return &authError{appError: appError, svcError: svcError}
 }
