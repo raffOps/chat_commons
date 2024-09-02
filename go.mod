@@ -1,6 +1,5 @@
-module github.com/raffops/chat
-
-go 1.22
+module github.com/raffops/chat_commons
+go 1.23
 
 require (
 	github.com/aws/aws-sdk-go v1.55.3

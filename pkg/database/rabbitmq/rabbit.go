@@ -2,8 +2,8 @@ package rabbitmq
 
 import (
 	"fmt"
-	"github.com/raffops/chat/pkg"
-	"github.com/raffops/chat/pkg/logger"
+	"github.com/raffops/chat_commons/pkg"
+	"github.com/raffops/chat_commons/pkg/logger"
 	"go.uber.org/zap"
 	"os"
 

@@ -3,7 +3,7 @@ package errs
 import (
 	"errors"
 	"fmt"
-	"github.com/raffops/chat/pkg/logger"
+	"github.com/raffops/chat_commons/pkg/logger"
 	"go.uber.org/zap"
 	"runtime/debug"
 )

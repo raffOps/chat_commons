@@ -5,8 +5,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
-	"github.com/raffops/chat/pkg"
-	"github.com/raffops/chat/pkg/logger"
+	"github.com/raffops/chat_commons/pkg"
+	"github.com/raffops/chat_commons/pkg/logger"
 	"os"
 )
 

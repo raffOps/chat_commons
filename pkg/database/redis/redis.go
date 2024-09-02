@@ -2,8 +2,8 @@ package redis
 
 import (
 	"context"
-	"github.com/raffops/chat/pkg"
-	"github.com/raffops/chat/pkg/logger"
+	"github.com/raffops/chat_commons/pkg"
+	"github.com/raffops/chat_commons/pkg/logger"
 	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
 	"os"
