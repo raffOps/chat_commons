@@ -35,10 +35,10 @@ var newClient = func() (redis.UniversalClient, bool, error) {
 	return client, true, nil
 }
 
-func NewUUIDGenerator(id string, uuidType string) *wuid.WUID {
+func NewUUIDGenerator(id string, key string) *wuid.WUID {
 	sanityCheck()
 	w := wuid.NewWUID(id, nil)
-	err := w.LoadH28FromRedis(newClient, uuidType)
+	err := w.LoadH28FromRedis(newClient, key)
 	if err != nil {
 		panic(err)
 	}
