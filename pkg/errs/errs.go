@@ -49,14 +49,14 @@ func NewInternalError(appError error) ChatError {
 	stack := string(debug.Stack())
 	lines := strings.Split(stack, "\n")
 	stackWithoutNewInternal := strings.Join(lines[5:], "\n")
-	id := uuid.New()
+	id := uuid.New().String()
 	logger.Debug(
 		ErrInternal.Error(),
-		zap.String("id", id.String()),
+		zap.String("id", id),
 		zap.Error(appError),
 		zap.String("stack", stackWithoutNewInternal),
 	)
-	return &authError{svcError: ErrInternal, appError: fmt.Errorf("code error: %d", id)}
+	return &authError{svcError: ErrInternal, appError: fmt.Errorf("code error: %s", id)}
 }
 
 func NewError(svcError, appError error) ChatError {
