@@ -3,9 +3,11 @@ package errs
 import (
 	"errors"
 	"fmt"
+	"github.com/google/uuid"
 	"github.com/raffops/chat_commons/pkg/logger"
 	"go.uber.org/zap"
 	"runtime/debug"
+	"strings"
 )
 
 var (
@@ -41,6 +43,20 @@ func (e authError) Error() string {
 		return e.SvcError().Error()
 	}
 	return fmt.Sprintf("%s: %s", e.svcError.Error(), e.appError.Error())
+}
+
+func NewInternalError(appError error) ChatError {
+	stack := string(debug.Stack())
+	lines := strings.Split(stack, "\n")
+	stackWithoutNewInternal := strings.Join(lines[5:], "\n")
+	id := uuid.New()
+	logger.Debug(
+		ErrInternal.Error(),
+		zap.String("id", id.String()),
+		zap.Error(appError),
+		zap.String("stack", stackWithoutNewInternal),
+	)
+	return &authError{svcError: ErrInternal, appError: fmt.Errorf("code error: %d", id)}
 }
 
 func NewError(svcError, appError error) ChatError {
